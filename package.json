@@ -1,0 +1,27 @@
+{
+  "name": "lisk_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haploide/lisk_test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haploide/lisk_test/issues"
+  },
+  "homepage": "https://github.com/haploide/lisk_test#readme",
+  "dependencies": {
+    "@liskhq/lisk-constants": "^1.2.3",
+    "@liskhq/lisk-cryptography": "^2.2.0",
+    "@liskhq/lisk-transactions": "^2.3.1",
+    "@liskhq/lisk-validator": "^0.2.1",
+    "lisk-sdk": "^2.3.6"
+  }
+}
