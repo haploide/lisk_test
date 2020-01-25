@@ -15,7 +15,7 @@ class HelloTransaction extends BaseTransaction {
             {
                 address: this.senderId
             }
-        ])
+        ]);
     }
 
     validateAsset() {
