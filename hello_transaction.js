@@ -2,7 +2,7 @@ const { BaseTransaction, TransactionError } = require('@liskhq/lisk-transactions
 
 class HelloTransaction extends BaseTransaction {
 
-    static get TYPE() {
+    static get TYPE () {
         return 10;
     }
 
@@ -55,11 +55,11 @@ class HelloTransaction extends BaseTransaction {
 
     undoAsset(store) {
         const sender = store.account.get(this.senderId);
-        const oldObj = {...sender, asset:null};
+        const oldObj = { ...sender, asset: null};
         store.account.set(sender.address, oldObj);
         return [];
     }
 
 }
 
-module.export = HelloTransaction;
+module.exports = HelloTransaction;
