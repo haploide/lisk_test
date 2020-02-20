@@ -2,11 +2,11 @@ const { BaseTransaction, TransactionError } = require('@liskhq/lisk-transactions
 
 class HelloTransaction extends BaseTransaction {
 
-    static get TYPE () {
+    static get TYPE() {
         return 10;
     }
 
-    static get FEE () {
+    static get FEE() {
         return `${10 ** 8}`;
     }
 
@@ -20,12 +20,12 @@ class HelloTransaction extends BaseTransaction {
 
     validateAsset() {
         const errors = [];
-        if (!this.asset.hello || typeof this.asset.hello !== 'string' || this.asset.hello.length > 64) {
+        if (!this.asset.fingerprint || typeof this.asset.fingerprint !== 'string') {
             errors.push(
                 new TransactionError(
-                    'Invalid "asset.hello" defined on transaction',
+                    'Invalid "asset.fingerprint" defined on transaction',
                     this.id,
-                    '.asset.hello',
+                    '.asset.fingerprint',
                     this.asset.hello,
                     'A string value no longer than 64 characters'
                 )
@@ -37,28 +37,39 @@ class HelloTransaction extends BaseTransaction {
     applyAsset(store) {
         const errors = [];
         const sender = store.account.get(this.senderId);
-        if (sender.asset && sender.asset.hello) {
-            errors.push(
-                new TransactionError(
-                    'You cannnot send a hello transaction multiple times',
-                    this.id,
-                    '.asset.hello',
-                    this.amount.toString()
-                )
-            );
-        } else {
-            const newObj ={...sender, asset: {hello: this.asset.hello}};
-            store.account.set(sender.address, newObj);
+
+        if (!sender.asset.apostilled_files_count) {
+            sender.asset.apostilled_files_count = 0;
         }
+
+        if (!sender.asset.apostilled_files) {
+            sender.asset.apostilled_files = [];
+        }
+
+        sender.asset.apostilled_files_count++;
+
+        sender.asset.apostilled_files.push(this.asset);
+
+        store.account.set(sender.address, sender);
+
+        //todo: agregar validaciones
+
+        const updatedSender = { ...sender, asset: {             
+            apostilled_files_count: sender.asset.apostilled_files_count,
+            apostilled_files: sender.asset.apostilled_files
+         } };
+        store.account.set(sender.address, updatedSender);
+        
         return errors;
     }
 
     undoAsset(store) {
         const sender = store.account.get(this.senderId);
-        const oldObj = { ...sender, asset: null};
+        const oldObj = { ...sender, asset: null };
         store.account.set(sender.address, oldObj);
         return [];
     }
+
 
 }
 
